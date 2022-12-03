@@ -14,7 +14,7 @@ import 'package:meta/meta.dart';
 /// It's required to pass a [onDefault] function in case you don't match any
 /// case
 /// {@endtemplate}
-abstract class CaseMatcher<ValueType, MatchResultType> {
+class CaseMatcher<ValueType, MatchResultType> {
   /// {@macro case_matcher}
   CaseMatcher({
     required this.onDefault,
@@ -27,15 +27,15 @@ abstract class CaseMatcher<ValueType, MatchResultType> {
   final HandleFunction<ValueType, MatchResultType> onDefault;
 
   /// All matches cases
-  final HashMap<int, HashSet<MatchCase<ValueType, MatchResultType>>>
-      _priorityToCasesMap =
-      HashMap<int, HashSet<MatchCase<ValueType, MatchResultType>>>.fromIterable(
+  final HashMap<int, LinkedHashSet<MatchCase<ValueType, MatchResultType>>>
+      _priorityToCasesMap = HashMap<int,
+          LinkedHashSet<MatchCase<ValueType, MatchResultType>>>.fromIterable(
     List<num>.generate(
       kMaxPriority,
       (index) => index,
     ),
     key: (priority) => int.parse(priority.toString()),
-    value: (_) => HashSet.identity(),
+    value: (_) => LinkedHashSet.identity(),
   );
 
   /// Add new case to [_priorityToCasesMap] so it can be used to match later on.
@@ -89,12 +89,19 @@ abstract class CaseMatcher<ValueType, MatchResultType> {
         priority: priority,
       );
 
-  /// Returns true if matcher matches with value, and false if don't/
-  bool _caseMatchWithValue(
-    MatchCase<ValueType, MatchResultType> matchCase,
-    ValueType value,
-  ) =>
-      matchCase.matcher.matches(value, {});
+  /// Invoke this to add a new case to all the possible cases, but starting from
+  /// a MatchCase Instance.
+  @internal
+  void onMatchCase(MatchCase<ValueType, MatchResultType> matchCase) => on(
+        matchCase.matcher,
+        matchCase.handler,
+        priority: matchCase.priority,
+      );
+
+  /// Obtain all cases declared to this case matcher.
+  @internal
+  Iterable<MatchCase<ValueType, MatchResultType>> get cases =>
+      _priorityToCasesMap.values.expand((element) => element);
 
   /// Applies the handler function of the first case that matches with [value].
   ///
@@ -120,4 +127,11 @@ abstract class CaseMatcher<ValueType, MatchResultType> {
     // If none of the cases match, then return the default handler for value.
     return onDefault(value);
   }
+
+  /// Returns true if matcher matches with value, and false if don't/
+  bool _caseMatchWithValue(
+    MatchCase<ValueType, MatchResultType> matchCase,
+    ValueType value,
+  ) =>
+      matchCase.matcher.matches(value, {});
 }
