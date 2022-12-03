@@ -9,3 +9,4 @@
 library case_matcher;
 
 export 'src/case_matcher.dart';
+export 'src/extensions/extensions.dart';
