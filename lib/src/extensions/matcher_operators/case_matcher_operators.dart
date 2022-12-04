@@ -11,7 +11,7 @@ extension CaseMatcherOperators<ValueType, MatchResultType>
   ///
   /// This can be understood as adding to first case matcher all the cases of
   /// [another]. The default case and all the other cases from will remain from
-  /// [this].
+  /// this.
   CaseMatcher<ValueType, MatchResultType> operator +(
     CaseMatcher<ValueType, MatchResultType> another,
   ) {
