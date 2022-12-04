@@ -1,1 +1,1 @@
-export 'int_value_type_extension.dart';
+export 'comparable_value_type_extension.dart';
