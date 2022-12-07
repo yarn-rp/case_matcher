@@ -31,39 +31,9 @@ match number {
 ```
 Rust is know for being a very expressive language, and this is just one of the many examples of how expressive it can be. In Dart, pattern matching is not yet supported, but we can still write declarative code that is easy to read and understand via using [Matchers](https://api.flutter.dev/flutter/package-matcher_matcher/package-matcher_matcher-library.html). 
 
-Matchers were initially exclusively used inside for testing, specially for unit testing, but then they got extracted into a separate package, and now they can be used in other places. A Matcher is basically a class that has a `matches` method that takes an input and returns a boolean value if input follows certain pattern specified in that function. Code below is from matcher library:
+Matchers were initially exclusively used inside for testing, specially for unit testing, but then they got extracted into a separate package, and now they can be used in other places. A Matcher is basically a class that has a `matches` method that takes an input and returns a boolean value if input follows certain pattern specified in that function. 
 
-```dart
-abstract class Matcher {
-  const Matcher();
-
-  /// Does the matching of the actual vs expected values.
-  ///
-  /// [item] is the actual value. [matchState] can be supplied
-  /// and may be used to add details about the mismatch that are too
-  /// costly to determine in [describeMismatch].
-  bool matches(dynamic item, Map matchState);
-
-  /// Builds a textual description of the matcher.
-  Description describe(Description description);
-
-  /// Builds a textual description of a specific mismatch.
-  ///
-  /// [item] is the value that was tested by [matches]; [matchState] is
-  /// the [Map] that was passed to and supplemented by [matches]
-  /// with additional information about the mismatch, and [mismatchDescription]
-  /// is the [Description] that is being built to describe the mismatch.
-  ///
-  /// A few matchers make use of the [verbose] flag to provide detailed
-  /// information that is not typically included but can be of help in
-  /// diagnosing failures, such as stack traces.
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-          Map matchState, bool verbose) =>
-      mismatchDescription;
-}
-```
-
-So basically, performing a `match` is almost the same as asking `if(condition)` in a conditional statement, only that condition sometimes are complex and can get nested into several conditions, making them hard to read if the case of study is just a little bit complex.
+So, performing a `match` is almost the same as asking `if(condition)` in a conditional statement, only that condition sometimes are complex and can get nested into several conditions, making them hard to read if the case of study is just a little bit complex.
 
 ### Primes with case matcher
 Let's see how can we write the primers example with case matcher library. 
